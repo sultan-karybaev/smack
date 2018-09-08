@@ -19,6 +19,7 @@
 		D104122C2138470F009A3FB5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D104122B2138470F009A3FB5 /* Constants.swift */; };
 		D104122E213856E7009A3FB5 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D104122D213856E7009A3FB5 /* LoginVC.swift */; };
 		D196F14A21440093009BB790 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D196F14921440093009BB790 /* AuthService.swift */; };
+		D196F14C21441715009BB790 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D196F14B21441715009BB790 /* RoundedButton.swift */; };
 		E51A1F251677C3218271E7E7 /* Pods_smack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E2CDB4C267696D115DFBFAA /* Pods_smack.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		D104122B2138470F009A3FB5 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D104122D213856E7009A3FB5 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		D196F14921440093009BB790 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		D196F14B21441715009BB790 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				D10412282138326E009A3FB5 /* GradientView.swift */,
+				D196F14B21441715009BB790 /* RoundedButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1001F6E21313BE300A47C6A /* ChannelVC.swift in Sources */,
+				D196F14C21441715009BB790 /* RoundedButton.swift in Sources */,
 				D1001F6C21313BCF00A47C6A /* ChatVC.swift in Sources */,
 				D103B4172138694100F75B89 /* CreateAccountVC.swift in Sources */,
 				D196F14A21440093009BB790 /* AuthService.swift in Sources */,
