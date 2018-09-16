@@ -35,7 +35,7 @@
         <!--ChannelVC-->
         <scene sceneID="t7p-ch-ork">
             <objects>
-                <viewController id="uTC-Pg-sWf" customClass="ChannelVC" customModule="smack" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="uTC-Pg-sWf" customClass="ChannelVC" customModule="smack" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Jra-hj-A0h"/>
                         <viewControllerLayoutGuide type="bottom" id="0bv-Dh-f1c"/>
@@ -332,6 +332,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="channelNameLabel" destination="8Hz-pz-Kc4" id="aBf-d8-84j"/>
                         <outlet property="menuBtn" destination="Evt-WB-Bek" id="uPc-ir-F4b"/>
                     </connections>
                 </viewController>

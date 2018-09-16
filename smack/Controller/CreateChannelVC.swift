@@ -31,14 +31,15 @@ class CreateChannelVC: UIViewController {
         spinner.isHidden = false
         spinner.startAnimating()
         
-//        MessageService.instance.createChannel(name: name, desc: desc, completion: { responce in
-//            if responce {
-//                self.spinner.isHidden = true
-//                self.spinner.stopAnimating()
-//                self.dismiss(animated: true, completion: nil)
-//                NotificationCenter.default.post(name: NOTIF_USER_DATA_DID_CHANGE, object: nil)
-//            }
-//        })
+        SocketService.instance.addChannel(channelName: name, channelDescription: desc, completion: { response in
+            if response {
+                self.spinner.isHidden = true
+                self.spinner.stopAnimating()
+                self.dismiss(animated: true, completion: nil)
+                //NotificationCenter.default.post(name: NOTIF_USER_DATA_DID_CHANGE, object: nil)
+            }
+
+        })
     }
     
     func setUpView() {

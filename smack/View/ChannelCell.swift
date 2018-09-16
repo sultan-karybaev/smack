@@ -14,7 +14,6 @@ class ChannelCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -28,6 +27,7 @@ class ChannelCell: UITableViewCell {
     
     func configureCell(channel : Channel) {
         let title = channel.channelTitle ?? ""
+//        print("configureCell \(title)")
         channelName.text = "#\(title)"
     }
 

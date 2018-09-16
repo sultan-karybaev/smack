@@ -16,12 +16,27 @@ class ChannelVC: UIViewController {
     @IBAction func backToChannelVC(for unwindSegue: UIStoryboardSegue) {}
     
     override func viewDidLoad() {
+//        tableView.contentInsetAdjustmentBehavior = .never
+//        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+//        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+        //scroller.contentOffset = CGPointMake(0.0, 0.0);
+        
         super.viewDidLoad()
+        //tableView = UITableView(
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.bounces = false
+        tableView.separatorStyle = .none
+        
         self.revealViewController().rearViewRevealWidth = self.view.frame.size.width - 60
         NotificationCenter.default.addObserver(self, selector: #selector(userDataDidChange(_:)), name: NOTIF_USER_DATA_DID_CHANGE, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(channelsLoaded(_:)), name: NOTIF_CHANNELS_LOADED, object: nil)
         self.setUpView()
+        SocketService.instance.getChannel(completion: { response in
+            if response {
+                self.tableView.reloadData()
+            }
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -40,13 +55,19 @@ class ChannelVC: UIViewController {
     }
     
     @IBAction func addChannelPressed(_ sender: Any) {
-        let createChannel = CreateChannelVC()
-        createChannel.modalPresentationStyle = .custom
-        present(createChannel, animated: true, completion: nil)
+        if AuthService.instance.isLoggedIn {
+            let createChannel = CreateChannelVC()
+            createChannel.modalPresentationStyle = .custom
+            present(createChannel, animated: true, completion: nil)
+        }
     }
     
     @objc func userDataDidChange(_ notif: Notification) {
         setUpView()
+    }
+    
+    @objc func channelsLoaded(_ notif: Notification) {
+        tableView.reloadData()
     }
     
     func setUpView() {
@@ -58,6 +79,7 @@ class ChannelVC: UIViewController {
             loginBtn.setTitle("Login", for: .normal)
             userImg.image = UIImage(named: "menuProfileIcon")
             userImg.backgroundColor = UIColor.clear
+            tableView.reloadData()
         }
     }
 }
@@ -75,10 +97,25 @@ extension ChannelVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "channelCell", for: indexPath) as? ChannelCell {
             let channel = MessageService.instance.channels[indexPath.row]
-            cell.channelName.text = channel.channelTitle
+            cell.configureCell(channel: channel)
             return cell
         }
         return ChannelCell()
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let channel = MessageService.instance.channels[indexPath.row]
+        MessageService.instance.selectedChannel = channel
+        NotificationCenter.default.post(name: NOTIF_CHANNEL_SELECTED, object: nil)
+        self.revealViewController().revealToggle(animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+    
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 0
+//    }
     
 }
