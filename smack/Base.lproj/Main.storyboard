@@ -323,10 +323,45 @@
                                     <constraint firstItem="8Hz-pz-Kc4" firstAttribute="bottom" secondItem="Evt-WB-Bek" secondAttribute="bottom" id="prK-BY-kcK"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3u-FY-zFy">
+                                <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Message" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RLF-ME-KvO">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qc2-s1-hBK">
+                                        <rect key="frame" x="337" y="5" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="DtZ-Pc-8hb"/>
+                                            <constraint firstAttribute="height" constant="30" id="TcW-0A-Vsl"/>
+                                        </constraints>
+                                        <state key="normal" image="send"/>
+                                        <connections>
+                                            <action selector="sendPressed:" destination="Xib-NA-lFl" eventType="touchUpInside" id="8Oi-g7-t5b"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="IHc-po-qaa"/>
+                                    <constraint firstAttribute="trailing" secondItem="RLF-ME-KvO" secondAttribute="trailing" id="buV-y1-atU"/>
+                                    <constraint firstAttribute="trailing" secondItem="Qc2-s1-hBK" secondAttribute="trailing" constant="8" id="egd-bg-CSz"/>
+                                    <constraint firstItem="RLF-ME-KvO" firstAttribute="leading" secondItem="z3u-FY-zFy" secondAttribute="leading" id="f3K-iE-VuU"/>
+                                    <constraint firstItem="Qc2-s1-hBK" firstAttribute="centerY" secondItem="z3u-FY-zFy" secondAttribute="centerY" id="hTm-eo-7sM"/>
+                                    <constraint firstAttribute="bottom" secondItem="RLF-ME-KvO" secondAttribute="bottom" id="pyz-IJ-Khw"/>
+                                    <constraint firstItem="RLF-ME-KvO" firstAttribute="top" secondItem="z3u-FY-zFy" secondAttribute="top" id="uv0-u0-7by"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="g1h-Nt-YHj" secondAttribute="trailing" id="6wi-1z-lyE"/>
+                            <constraint firstItem="z3u-FY-zFy" firstAttribute="leading" secondItem="DXt-8g-ta6" secondAttribute="leading" id="DzL-z6-ySd"/>
+                            <constraint firstAttribute="trailing" secondItem="z3u-FY-zFy" secondAttribute="trailing" id="VqQ-he-Dea"/>
+                            <constraint firstItem="cTc-H2-Gq6" firstAttribute="top" secondItem="z3u-FY-zFy" secondAttribute="bottom" identifier="qwerty" id="X4i-JH-FGC"/>
                             <constraint firstItem="g1h-Nt-YHj" firstAttribute="leading" secondItem="DXt-8g-ta6" secondAttribute="leading" id="ZwN-FD-Alh"/>
                             <constraint firstItem="g1h-Nt-YHj" firstAttribute="top" secondItem="DXt-8g-ta6" secondAttribute="top" id="e9D-kg-L47"/>
                         </constraints>
@@ -334,11 +369,13 @@
                     <connections>
                         <outlet property="channelNameLabel" destination="8Hz-pz-Kc4" id="aBf-d8-84j"/>
                         <outlet property="menuBtn" destination="Evt-WB-Bek" id="uPc-ir-F4b"/>
+                        <outlet property="messageTextField" destination="RLF-ME-KvO" id="Njq-Mj-J5C"/>
+                        <outlet property="textView" destination="z3u-FY-zFy" id="MmH-9t-IoW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SF7-TG-xsG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="929" y="608"/>
+            <point key="canvasLocation" x="928.79999999999995" y="607.64617691154433"/>
         </scene>
         <!--Create AccountVC-->
         <scene sceneID="n4z-pK-Ykk">
@@ -610,6 +647,7 @@
         <image name="closeButton" width="28" height="28"/>
         <image name="menuProfileIcon" width="99" height="99"/>
         <image name="profileDefault" width="192" height="192"/>
+        <image name="send" width="30" height="30"/>
         <image name="smackBack" width="28" height="28"/>
         <image name="smackBurger" width="40" height="40"/>
         <image name="smackLogo" width="48" height="40"/>

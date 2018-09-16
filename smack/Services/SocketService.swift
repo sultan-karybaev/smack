@@ -46,5 +46,31 @@ class SocketService: NSObject {
         }
     }
     
+    func sendMessage(messageBody: String, userId: String, channelId: String, completion: @escaping CompletionHandler) {
+        let userName = UserDataService.instance.name
+        let userAvatar = UserDataService.instance.avatarName
+        let userAvatarColor = UserDataService.instance.avatarColor
+        socket.emit("newMessage", messageBody, userId, channelId, userName, userAvatar, userAvatarColor)
+        completion(true)
+    }
+    
+    func getMessage(completion: @escaping CompletionHandler) {
+        socket.on("messageCreated") { (dataArray, ack) in
+            guard let messageBody = dataArray[0] as? String else {return}
+            //guard let userId = dataArray[1] as? String else {return}
+            guard let channelId = dataArray[2] as? String else {return}
+            guard let userName = dataArray[3] as? String else {return}
+            guard let userAvatar = dataArray[4] as? String else {return}
+            guard let userAvatarColor = dataArray[5] as? String else {return}
+            guard let messageId = dataArray[6] as? String else {return}
+            guard let temiStamp = dataArray[7] as? String else {return}
+            
+            let message = Message(message: messageBody, userName: userName, channelId: channelId, userAvatar: userAvatar, userAvatarColor: userAvatarColor, id: messageId, timeStamp: temiStamp)
+            MessageService.instance.messages.append(message)
+            
+            completion(true)
+        }
+    }
+    
     
 }
