@@ -37,9 +37,9 @@ class SocketService: NSObject {
         socket.on("channelCreated") { (dataArray, ack) in
             guard let channelName = dataArray[0] as? String else {return}
             guard let channelDesc = dataArray[1] as? String else {return}
-            guard let channelID = dataArray[2] as? String else {return}
+            guard let channelId = dataArray[2] as? String else {return}
             
-            let channel = Channel(channelTitle: channelName, channelDescription: channelDesc, id: channelID)
+            let channel = Channel(channelTitle: channelName, channelDescription: channelDesc, id: channelId)
             MessageService.instance.channels.append(channel)
             
             completion(true)
@@ -54,7 +54,7 @@ class SocketService: NSObject {
         completion(true)
     }
     
-    func getMessage(completion: @escaping CompletionHandler) {
+    func getMessage(completion: @escaping (_ newMessage: Message) -> Void) {
         socket.on("messageCreated") { (dataArray, ack) in
             guard let messageBody = dataArray[0] as? String else {return}
             //guard let userId = dataArray[1] as? String else {return}
@@ -66,11 +66,64 @@ class SocketService: NSObject {
             guard let temiStamp = dataArray[7] as? String else {return}
             
             let message = Message(message: messageBody, userName: userName, channelId: channelId, userAvatar: userAvatar, userAvatarColor: userAvatarColor, id: messageId, timeStamp: temiStamp)
-            MessageService.instance.messages.append(message)
             
-            completion(true)
+            completion(message)
+            
+//            if channelId == MessageService.instance.selectedChannel?.id && AuthService.instance.isLoggedIn {
+//
+//                MessageService.instance.messages.append(message)
+//                completion(true)
+//            } else {
+//                completion(false)
+//            }
         }
+    }
+    
+    func startTyping() {
+        guard let channelId = MessageService.instance.selectedChannel?.id else {return}
+        let userName = UserDataService.instance.name
+        socket.emit(START_TYPING, userName, channelId)
+    }
+    
+    func stopTyping() {
+        let userName = UserDataService.instance.name
+        socket.emit(STOP_TYPING, userName)
+    }
+    
+    func getTypingUsers(completion: @escaping (_ typingUsers: [String: String]) -> Void) {
+        socket.on(USER_TYPING_UPDATE, callback: {(dataArray, ack) in
+            guard let typingUsers = dataArray[0] as? [String: String] else {return}
+            completion(typingUsers)
+//            if let channelId = dataArray[1] as? String {
+//
+//            } else {
+//
+//            }
+            
+        })
     }
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

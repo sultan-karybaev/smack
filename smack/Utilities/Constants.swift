@@ -54,6 +54,12 @@ let BEARER_HEADER = [
 let AVATAR_COLLECTION_CELL = "avatarCollectionCell"
 let MESSAGE_CELL = "MessageCell"
 
+//Socket Commands
+
+let START_TYPING = "startType"
+let STOP_TYPING = "stopType"
+let USER_TYPING_UPDATE = "userTypingUpdate"
+
 
 
 

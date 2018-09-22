@@ -15,6 +15,10 @@ class ChatVC: UIViewController {
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var textView: UIView!
     @IBOutlet weak var messageTableview: UITableView!
+    @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var typingUsersLabel: UILabel!
+    
+    var isTyping = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +33,8 @@ class ChatVC: UIViewController {
         print("height \(messageTableview.contentSize.height)")
         
         textView.bindToKeyboard()
+        
+        sendButton.isHidden = true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
@@ -49,14 +55,55 @@ class ChatVC: UIViewController {
             })
         }
         
-        SocketService.instance.getMessage(completion: { success in
-            if success {
+        SocketService.instance.getMessage(completion: { newMessage in
+            if newMessage.channelId == MessageService.instance.selectedChannel?.id && AuthService.instance.isLoggedIn {
+                MessageService.instance.messages.append(newMessage)
                 self.messageTableview.reloadData()
                 DispatchQueue.main.async(execute: {
                     if MessageService.instance.messages.count > 0 {
-                       self.messageTableview.scrollToRow(at: [0, MessageService.instance.messages.count - 1], at: .bottom, animated: false)
+                        let endIndex = IndexPath(row: MessageService.instance.messages.count - 1, section: 0)
+                        self.messageTableview.scrollToRow(at: endIndex, at: .bottom, animated: false)
                     }
                 })
+            }
+        })
+        
+//        SocketService.instance.getMessage(completion: { success in
+//            if success {
+//                self.messageTableview.reloadData()
+//                DispatchQueue.main.async(execute: {
+//                    if MessageService.instance.messages.count > 0 {
+//                        let endIndex = IndexPath(row: MessageService.instance.messages.count - 1, section: 0)
+//                       self.messageTableview.scrollToRow(at: endIndex, at: .bottom, animated: false)
+//                    }
+//                })
+//            }
+//        })
+        
+        SocketService.instance.getTypingUsers(completion: { typingUsers in
+            guard let channelId = MessageService.instance.selectedChannel?.id else {return}
+            var names = ""
+            var numberOfTypers = 0
+            
+            for (typingUser, channel) in typingUsers {
+                if typingUser != UserDataService.instance.name && channel == channelId {
+                    if names == "" {
+                        names = typingUser
+                    } else {
+                        names = "\(names), \(typingUser)"
+                    }
+                    numberOfTypers += 1
+                }
+            }
+            
+            if numberOfTypers > 0 && AuthService.instance.isLoggedIn {
+                var verb = "is"
+                if numberOfTypers > 1 {
+                    verb = "are"
+                }
+                self.typingUsersLabel.text = "\(names) \(verb) typing a message"
+            } else {
+                self.typingUsersLabel.text = ""
             }
         })
     }
@@ -73,6 +120,23 @@ class ChatVC: UIViewController {
                 }
             })
         }
+        isTyping = false
+        sendButton.isHidden = true
+        SocketService.instance.stopTyping()
+    }
+    
+    @IBAction func messageBoxEditing(_ sender: Any) {
+        if messageTextField.text == "" {
+            isTyping = false
+            sendButton.isHidden = true
+            SocketService.instance.stopTyping()
+        } else {
+            if isTyping == false {
+                sendButton.isHidden = false
+                SocketService.instance.startTyping()
+            }
+            isTyping = true
+        }
     }
     
     @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
@@ -84,6 +148,7 @@ class ChatVC: UIViewController {
             onLoginGetMessages()
         } else {
             channelNameLabel.text = "Please Log In"
+            messageTableview.reloadData()
         }
     }
     
