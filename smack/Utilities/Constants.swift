@@ -52,3 +52,18 @@ let BEARER_HEADER = [
 //Cells
 
 let AVATAR_COLLECTION_CELL = "avatarCollectionCell"
+let MESSAGE_CELL = "MessageCell"
+
+
+
+
+
+
+
+
+
+
+
+
+
+

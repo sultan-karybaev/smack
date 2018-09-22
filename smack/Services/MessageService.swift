@@ -71,7 +71,6 @@ class MessageService {
                         self.messages.append(message)
                     }
                     //NotificationCenter.default.post(name: NOTIF_CHANNELS_LOADED, object: nil)
-                    print(self.messages)
                     completion(true)
                 }
             } else {

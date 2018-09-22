@@ -14,15 +14,25 @@ class ChatVC: UIViewController {
     @IBOutlet weak var channelNameLabel: UILabel!
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var textView: UIView!
+    @IBOutlet weak var messageTableview: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //self.revealViewController().delegate = self
         
+        messageTableview.delegate = self
+        messageTableview.dataSource = self
+        messageTableview.estimatedRowHeight = 72
+        messageTableview.rowHeight = UITableViewAutomaticDimension
+        print("height \(messageTableview.frame.height)")
+        print("height \(messageTableview.contentSize.height)")
+        
         textView.bindToKeyboard()
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
+        
         menuBtn.addTarget(self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
@@ -38,6 +48,17 @@ class ChatVC: UIViewController {
                 }
             })
         }
+        
+        SocketService.instance.getMessage(completion: { success in
+            if success {
+                self.messageTableview.reloadData()
+                DispatchQueue.main.async(execute: {
+                    if MessageService.instance.messages.count > 0 {
+                       self.messageTableview.scrollToRow(at: [0, MessageService.instance.messages.count - 1], at: .bottom, animated: false)
+                    }
+                })
+            }
+        })
     }
     
     @IBAction func sendPressed(_ sender: Any) {
@@ -92,9 +113,46 @@ class ChatVC: UIViewController {
     func getMessages() {
         guard let channelId = MessageService.instance.selectedChannel?.id else {return}
         MessageService.instance.findAllMessagesForChannel(channelId: channelId, completion: { success in
-            
+            if success {
+                self.messageTableview.reloadData()
+                DispatchQueue.main.async(execute: {
+                    //print("height \(self.messageTableview.frame.height)")
+                    //print("height \(self.messageTableview.contentSize.height)")
+                    //self.messageTableview.scrollToNearestSelectedRow(at: .bottom, animated: false)
+                    if MessageService.instance.messages.count > 0 {
+                        self.messageTableview.scrollToRow(at: [0, MessageService.instance.messages.count - 1], at: .bottom, animated: false)
+                    }
+                })
+            }
         })
     }
+    
+    
+}
+
+extension ChatVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return MessageService.instance.messages.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = messageTableview.dequeueReusableCell(withIdentifier: MESSAGE_CELL, for: indexPath) as? MessageCell {
+            let message = MessageService.instance.messages[indexPath.row]
+            cell.configureCell(message: message)
+            return cell
+        } else {
+            return MessageCell()
+        }
+    }
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 72
+//    }
     
     
 }
